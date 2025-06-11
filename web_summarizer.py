@@ -174,7 +174,8 @@ body, .gradio-container, label, textarea, input, .output-markdown, .output-html,
 # לוגו ב-base64 (הדבק כאן את ה־base64 המלא)
 logo_md = """
 <div align="center">
-  <img src="data:image/png;base64,PASTE_BASE64_STRING_HERE" style="height:80px; margin-bottom: 10px;">
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAABfCAYAAAAosTT8AAANm0lEQVR4nO3dzY6kSBQAQVsNIf7/F5rsYeqcSV3Z5IN5E7PHLZoI8n/3wRfOgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg2bO1XdqHfG7lQ4fzRZ0o2K8eZCByXf/rF3hv3sdpwEN1bz6fK8fXPvs2Vhwl4o/GZBmb7GZIyNO34+NEZeqwpmfCrkf2cjj1+9Wz5rLmpwlmE/YHqbxG3Ug+k4v8RrHEb8xTXvxMYmcvhOrGfbv/AwWd1qgP85huquMbvTcB3mj87xl6Ps8+H9Y6B5zbsA9+zx/k41PgP2eCv2btk2F4KjcfhjPrNm4ebWJ+kxZ8zIXu7H8NzwDuW81v6eN0fKp4st3PGHcB8IexrJ9kCnStKj4o/oHzneGTiOQHyKzyHJde7Zf1ZGZnNcC94r/0nAl8QzuFur7pVQ/Hz/RM+pcHZnxZ4R/DmQw17ZkB4ZclPlMZecb5OQvX43xOoB8jP0QzWQovRG/TblZve2MzePx13xPqbbj2qzgK57fx9ztZ3b57A7/cF/UJ7V/Q0lDvSnv+QvQ/Bnpvgj/G+sj/8zGH0oF6viJtVq+x7Cj5TXFQdF/3Mzsv+6/E1M/MT9BrKuA/wz0wXwD8QzT6tckGpoP0xrkku4Z1YOYHW8g4t3fO+p74e5Dhvvt+PMdl/d8b1C6YJz5ZGeKttCejxM7z5RxOZ4ReQfxB8pv6U8T6P0u7z96CP/2Px9AGjrpOE9hZwH0A7ytHodqB6YlQHz88CKzv6M09xPXwMeQm0nQ7d1wTf5jYBOe4KveVh7EvQ70PHw6p68ZDr5zk7TeBf8SG0Bu/oScQ/El8/Fsn1bHym8ztQxHzAZqA/A5zHgO5B/Ief4ym/R7RYgU0WhHztU9i/Af8DOgLMRxyQv1zGYOivJuB8uv11OCXw/74jt5A16IfGBgf60A/Fl4rrsc3hr/kOdD1+HnMuAWQznj7j/nh5ekS9AfRngwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8O7/AZpAdqDNLF1AAAAASUVORK5CYII=
+" style="height:80px; margin-bottom: 10px;">
 </div>
 """
 
