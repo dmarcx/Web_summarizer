@@ -212,4 +212,6 @@ with gr.Blocks(css=rtl_css) as demo:
         outputs=[output_file, output_text]
     )
 
-demo.launch(inbrowser=True)
+import os
+port = int(os.environ.get("PORT", 7860))
+demo.launch(server_name="0.0.0.0", server_port=port)
