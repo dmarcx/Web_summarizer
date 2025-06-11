@@ -1,15 +1,18 @@
 import os
-from dotenv import load_dotenv
 import openai
 import gradio as gr
-
 from docx import Document
+from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 import PyPDF2
 import re
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 import tempfile
+
+# טעינת מפתח OpenAI מהסביבה
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY
 
 def read_transcript_from_fileobj(fileobj):
     filename = fileobj.name
@@ -124,10 +127,6 @@ def save_summary_to_word(summary, out_path):
 
     doc.save(out_path)
 
-# --- טעינת API ---
-load_dotenv()
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
 def summarize_file(file):
     if not OPENAI_API_KEY:
         return None, "API key not found."
@@ -146,18 +145,15 @@ def summarize_file(file):
         f"{transcript}"
     )
     try:
-        import openai
-
-response = openai.chat.completions.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "system", "content": "אתה עוזר חכם שמסכם ישיבות."},
-        {"role": "user", "content": prompt}
-    ],
-    temperature=0.3
-)
-summary = response.choices[0].message.content
-
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "אתה עוזר חכם שמסכם ישיבות."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.3
+        )
+        summary = response.choices[0].message.content
         base, _ = os.path.splitext(os.path.basename(file.name))
         summary_filename = f"{base}_SUMMARY.docx"
         out_path = os.path.join(tempfile.gettempdir(), summary_filename)
@@ -166,90 +162,38 @@ summary = response.choices[0].message.content
     except Exception as e:
         return None, f"שגיאה: {e}"
 
-# --- CSS מתקדם לעיצוב יפה, קומפקטי ו־RTL ---
+# CSS RTL Custom
 rtl_css = """
-body, .gradio-container, label, textarea, input, .output-markdown, .output-html, .gr-description,
-.gradio-container .gr-description, .gradio-container .gr-description p, .gr-textbox label, .gr-box,
-.gr-form, .gr-interface, .gr-file label {
+body, .gradio-container, label, textarea, input, .output-markdown, .output-html, .gr-description, .gradio-container .gr-description, .gradio-container .gr-description p, .gr-textbox label, .gr-box, .gr-form, .gr-interface, .gr-file label {
     direction: rtl !important;
     text-align: right !important;
     font-family: Arial, 'Noto Sans Hebrew', 'Frank Ruhl Libre', 'David', sans-serif !important;
 }
-#logo-img {
-    margin-bottom: 8px !important;
-    margin-top: 10px !important;
-    max-height: 50px !important;
-    object-fit: contain !important;
-}
-.gr-block.gr-image {
-    padding: 0 !important;
-    margin: 0 auto !important;
-    max-width: 260px !important;
-}
-.gr-block.gr-markdown {
-    margin-bottom: 6px !important;
-    margin-top: 0px !important;
-    text-align: center !important;
-}
-.gradio-container {
-    padding: 10px !important;
-    max-width: 630px !important;
-    margin: 0 auto !important;
-}
-.row-flex {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
-    gap: 6px;
-}
-#col-upload, #col-download {
-    flex: 1 1 0;
-    min-width: 130px;
-    max-width: 220px;
-}
-#col-button {
-    flex: 0 0 85px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-}
-.gr-block.gr-button {
-    width: 100%;
-    height: 38px;
-    margin-bottom: 0 !important;
-}
-.gr-block.gr-textbox {
-    min-height: 36px !important;
-    max-height: 80px !important;
-    margin-bottom: 6px !important;
-}
 """
 
-logo_path = "LOGO BARAN.PNG"
+# לוגו ב-base64 (הדבק כאן את ה־base64 המלא)
+logo_md = """
+<div align="center">
+  <img src="data:image/png;base64,PASTE_BASE64_STRING_HERE" style="height:80px; margin-bottom: 10px;">
+</div>
+"""
 
 with gr.Blocks(css=rtl_css) as demo:
-    gr.Image(value=logo_path, show_label=False, elem_id="logo-img", height=50)
-    gr.Markdown("#### מערכת הפקת סיכומי ישיבה")
-    with gr.Row(elem_id="row", variant="default"):
-        with gr.Column(elem_id="col-upload"):
-            file_input = gr.File(label="העלה קובץ תמלול (txt / docx / pdf)", min_width=0)
-        with gr.Column(elem_id="col-button"):
-            submit_btn = gr.Button("סכם", size="sm")
-        with gr.Column(elem_id="col-download"):
-            output_file = gr.File(label="הורד את הסיכום", min_width=0)
-    output_text = gr.Textbox(label="הודעה")
-
-    def wrapped_summarize(file):
-        out_file, msg = summarize_file(file)
-        return out_file, msg
+    gr.Markdown(logo_md)
+    gr.Markdown("<h3>מערכת הפקת סיכומי ישיבה</h3>")
+    with gr.Column():
+        file_input = gr.File(label="העלה קובץ תמלול (txt / docx / pdf)")
+        file_output = gr.File(label="הורד את הסיכום")
+        message = gr.Textbox(label="הודעה")
+        submit_btn = gr.Button("סכם")
 
     submit_btn.click(
-        fn=wrapped_summarize,
+        summarize_file,
         inputs=file_input,
-        outputs=[output_file, output_text]
+        outputs=[file_output, message]
     )
 
-import os
-port = int(os.environ.get("PORT", 7860))
-demo.launch(server_name="0.0.0.0", server_port=port)
+# להריץ בפורט דינמי, חובה ב-Render
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    demo.launch(server_name="0.0.0.0", server_port=port)
