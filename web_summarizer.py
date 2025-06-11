@@ -136,23 +136,24 @@ def summarize_file(file):
         "תמלול הישיבה:\n"
         f"{transcript}"
     )
-   try:
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "אתה עוזר חכם שמסכם ישיבות."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.3
-    )
-    summary = response.choices[0].message.content
-    base, _ = os.path.splitext(os.path.basename(file.name))
-    summary_filename = f"{base}_SUMMARY.docx"
-    out_path = os.path.join(tempfile.gettempdir(), summary_filename)
-    save_summary_to_word(summary, out_path)
-    return out_path, "הסיכום מוכן להורדה"
-except Exception as e:
-    return None, f"שגיאה: {e}"
+    try:
+        client = openai.OpenAI(api_key=OPENAI_API_KEY)
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "אתה עוזר חכם שמסכם ישיבות."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.3
+        )
+        summary = response.choices[0].message.content
+        base, _ = os.path.splitext(os.path.basename(file.name))
+        summary_filename = f"{base}_SUMMARY.docx"
+        out_path = os.path.join(tempfile.gettempdir(), summary_filename)
+        save_summary_to_word(summary, out_path)
+        return out_path, "הסיכום מוכן להורדה"
+    except Exception as e:
+        return None, f"שגיאה: {e}"
 
 # --- CSS מינימלי, קומפקטי במיוחד ---
 rtl_css = """
