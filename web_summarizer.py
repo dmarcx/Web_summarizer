@@ -155,7 +155,7 @@ def summarize_file(file):
     except Exception as e:
         return None, f"שגיאה: {e}"
 
-# --- CSS קומפקטי במיוחד ---
+# --- CSS מינימלי וקומפקטי לשורה אחת ---
 rtl_css = """
 body, .gradio-container, label, textarea, input, .output-markdown, .output-html, .gr-description, .gradio-container .gr-description, .gradio-container .gr-description p, .gr-textbox label, .gr-box, .gr-form, .gr-interface, .gr-file label {
     direction: rtl !important;
@@ -163,43 +163,52 @@ body, .gradio-container, label, textarea, input, .output-markdown, .output-html,
     font-family: Arial, 'Noto Sans Hebrew', 'Frank Ruhl Libre', 'David', sans-serif !important;
 }
 #logo-img {
-    margin-bottom: 4px !important;
-    margin-top: 6px !important;
-    max-height: 28px !important;
+    display: block !important;
+    margin: 6px auto 4px auto !important;
+    max-height: 34px !important;
     object-fit: contain !important;
 }
 .gradio-container, #main-col {
-    max-width: 380px !important;
+    max-width: 410px !important;
     min-width: 0 !important;
     margin: 0 auto !important;
     padding: 0 !important;
 }
-.gr-block.gr-image, .gr-block.gr-markdown, .gr-block.gr-file, .gr-block.gr-textbox, .gr-block.gr-button {
-    margin-bottom: 2px !important;
+.gr-block.gr-image, .gr-block.gr-markdown {
+    margin-bottom: 4px !important;
     margin-top: 0px !important;
     padding: 0 !important;
-    max-width: 120px !important;
+    max-width: 380px !important;
     min-width: 0 !important;
-    display: flex !important;
-    align-items: center !important;
+    display: block !important;
 }
-.gr-block.gr-file, .gr-block.gr-textbox, .gr-block.gr-button {
-    min-height: 28px !important;
+.gr-block.gr-row {
+    margin-bottom: 6px !important;
+    margin-top: 0px !important;
+    padding: 0 !important;
+    max-width: 400px !important;
+    min-width: 0 !important;
+}
+.gr-block.gr-file, .gr-block.gr-button {
+    min-height: 24px !important;
     max-height: 34px !important;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
 }
 .gr-block.gr-button button {
-    min-height: 24px !important;
-    max-height: 28px !important;
+    min-height: 26px !important;
+    max-height: 32px !important;
     font-size: 12px !important;
-    padding: 1px 8px !important;
+    padding: 2px 10px !important;
 }
 """
 
-logo_path = "logo_baran.png"  # שים קובץ לוגו בשם זה, ללא רווחים, בתיקייה
+logo_path = "logo_baran.png"  # שים קובץ בשם הזה בתיקיית הפרויקט
 
 with gr.Blocks(css=rtl_css) as demo:
     with gr.Column(elem_id="main-col"):
-        gr.Image(value=logo_path, show_label=False, elem_id="logo-img", height=28)
+        gr.Image(value=logo_path, show_label=False, elem_id="logo-img", height=34)
         gr.Markdown("#### מערכת הפקת סיכומי ישיבה")
         with gr.Row():
             file_input = gr.File(show_label=False, scale=3)
