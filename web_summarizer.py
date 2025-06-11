@@ -195,23 +195,23 @@ body, .gradio-container, label, textarea, input, .output-markdown, .output-html,
 logo_path = "logo_baran.png"  # עדכן במדויק לשם הקובץ שלך
 
 with gr.Blocks(css=rtl_css) as demo:
-    gr.Image(value=logo_path, show_label=False, elem_id="logo-img", height=32)
-    gr.Markdown("#### מערכת הפקת סיכומי ישיבה")
-    file_input = gr.File(label="העלה קובץ תמלול (txt / docx / pdf)")
-    output_file = gr.File(label="הורד את הסיכום")
-    output_text = gr.Textbox(label="הודעה")
-    submit_btn = gr.Button("סכם", size="sm")
+    with gr.Column(elem_id="main-col"):
+        gr.Image(value=logo_path, show_label=False, elem_id="logo-img", height=32)
+        gr.Markdown("#### מערכת הפקת סיכומי ישיבה")
+        file_input = gr.File(label="העלה קובץ תמלול (txt / docx / pdf)")
+        output_file = gr.File(label="הורד את הסיכום")
+        output_text = gr.Textbox(label="הודעה")
+        submit_btn = gr.Button("סכם", size="sm")
 
-    def wrapped_summarize(file):
-        out_file, msg = summarize_file(file)
-        return out_file, msg
+        def wrapped_summarize(file):
+            out_file, msg = summarize_file(file)
+            return out_file, msg
 
-    submit_btn.click(
-        fn=wrapped_summarize,
-        inputs=file_input,
-        outputs=[output_file, output_text]
-    )
-
+        submit_btn.click(
+            fn=wrapped_summarize,
+            inputs=file_input,
+            outputs=[output_file, output_text]
+        )
 import os
 port = int(os.environ.get("PORT", 7860))
 demo.launch(server_name="0.0.0.0", server_port=port)
