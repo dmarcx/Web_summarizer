@@ -192,7 +192,7 @@ body, .gradio-container, label, textarea, input, .output-markdown, .output-html,
 }
 """
 
-logo_path = "LOGO BARAN.PNG"  # עדכן במדויק לשם הקובץ שלך
+logo_path = "logo_baran.png"  # עדכן במדויק לשם הקובץ שלך
 
 with gr.Blocks(css=rtl_css) as demo:
     gr.Image(value=logo_path, show_label=False, elem_id="logo-img", height=32)
